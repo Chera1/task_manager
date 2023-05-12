@@ -3,4 +3,4 @@ from .tag import Tag
 from .task import Task
 
 
-__all__ = ["User"]
+__all__ = ["User", "Task", "Tag"]
