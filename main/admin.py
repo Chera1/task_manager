@@ -4,8 +4,10 @@ from .models import User, Task, Tag
 
 
 class CustomUserAdmin(UserAdmin):
-    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ["role"]}),)
-    add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ["role"]}),)
+    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ["role"]}),)  # Добавление поля role в отображении админки
+    # при просмотре/редактировании
+    add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ["role"]}),) # Добавление поля role в отображении
+    # админки при создании объекта
 
 
 class TaskManagerAdminSite(admin.AdminSite):

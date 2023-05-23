@@ -30,12 +30,8 @@ class TestAdmin(APITestCase):
         actions = {"changelist": [], "add": [], "change": (key,)}
         if check_actions:
             actions = {key: val for key, val in actions.items() if key in check_actions}
-
         for action, args in actions.items():
-            # print('args:', args)
-            # print(f'{app_label}_{model_name}_{action}')
             url = reverse(f"admin:{app_label}_{model_name}_{action}", args=args)
-            print(cls.client)
             response = cls.client.get(url)
             assert response.status_code == HTTPStatus.OK, response.content
 
