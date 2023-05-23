@@ -31,7 +31,6 @@ class TestAdmin(APITestCase):
 
         for action, args in actions.items():
             url = reverse(f"admin:{app_label}_{model_name}_{action}", args=args)
-            print(cls.client)
             response = cls.client.get(url)
             assert response.status_code == HTTPStatus.OK, response.content
 
