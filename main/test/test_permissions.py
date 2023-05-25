@@ -19,7 +19,7 @@ class AccountTests(APITestCase):
         self.client.force_login(user)
         content = self.create_task(self.client, user)
         response = self.client.delete(self.url_tasks + str(content["id"]) + "/")
-        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_delete_task_by_staff_user(self):
         """
@@ -29,7 +29,7 @@ class AccountTests(APITestCase):
         self.client.force_login(user)
         content = self.create_task(self.client, user)
         response = self.client.delete(self.url_tasks + str(content["id"]) + "/")
-        self.assertEqual(response.status_code, HTTPStatus.NO_CONTENT)
+        assert response.status_code == HTTPStatus.NO_CONTENT
 
     def create_task(self, client: APIClient, user: User) -> dict:
         """
@@ -44,7 +44,7 @@ class AccountTests(APITestCase):
         response = client.post(self.url_tasks, data, format='json')
         content = response.json()
         assert response.status_code == HTTPStatus.CREATED, content
-        self.assertEqual(Task.objects.count(), 1)
+        assert Task.objects.count() == 1
         return content
 
     def create_tag(self, client: APIClient) -> dict:
@@ -57,6 +57,6 @@ class AccountTests(APITestCase):
         data = {"title": "test_tag"}
         response = client.post(url, data, format='json')
         content = response.json()
-        self.assertEqual(response.status_code, HTTPStatus.CREATED, content)
-        self.assertEqual(Tag.objects.count(), 1)
+        assert response.status_code == HTTPStatus.CREATED, content
+        assert Tag.objects.count() == 1
         return content
