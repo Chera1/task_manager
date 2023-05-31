@@ -29,8 +29,6 @@ RUN apt-get update -qq \
 
 RUN pip install "poetry==$POETRY_VERSION"
 
-ENV PATH $PATH:/root/.poetry/bin
-
 RUN poetry config virtualenvs.create false
 
 RUN mkdir -p /app
