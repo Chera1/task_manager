@@ -15,8 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from main.admin import task_manager_admin_site
+from main.views import UserViewSet, TaskViewSet, TagViewSet
+from rest_framework import routers
+
+router = routers.SimpleRouter()
+router.register(r"users", UserViewSet, basename="users")
+router.register(r"tasks", TaskViewSet, basename="tasks")
+router.register(r"tags", TagViewSet, basename="tags")
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),  # Для подключения модуля авторизации (кнопка login)
+    path("api/", include(router.urls)),
+    path("admin/", task_manager_admin_site.urls),
 ]
