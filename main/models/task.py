@@ -19,7 +19,8 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     expired_date = models.DateTimeField(
-        verbose_name="the date by which the task must be completed"
+        verbose_name="the date by which the task must be completed",
+        null=True
     )
     status = models.CharField(
         max_length=255, default=TypeStatus.new_task, choices=TypeStatus.choices
@@ -37,3 +38,6 @@ class Task(models.Model):
         verbose_name="performer of the task",
     )
     tags = models.ManyToManyField(Tag)
+
+    def __str__(self):
+        return self.title
