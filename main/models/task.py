@@ -30,12 +30,14 @@ class Task(models.Model):
         related_name="author",
         on_delete=models.DO_NOTHING,
         verbose_name="author of the task",
+        null=True
     )
     performer = models.ForeignKey(
         User,
         related_name="performer",
         on_delete=models.DO_NOTHING,
         verbose_name="performer of the task",
+        null=True
     )
     tags = models.ManyToManyField(Tag)
 
