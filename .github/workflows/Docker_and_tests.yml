@@ -1,0 +1,23 @@
+name: Docker and Tests CI
+
+on:
+  push:
+    branches: [ "develop" , "master" ]
+  pull_request:
+    branches: [ "develop" , "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+  
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker-compose build -t task-manager .
+
+    - name: Run Tests
+      run: |
+        docker-compose run --rm api poetry run pytest
+    
