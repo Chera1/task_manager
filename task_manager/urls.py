@@ -14,11 +14,25 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from main.admin import task_manager_admin_site
 from main.views import UserViewSet, TaskViewSet, TagViewSet
-from rest_framework import routers
+from rest_framework import routers, permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Snippets API",
+        default_version="v1",
+        description="Description of the API",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="CherednichenkoArtemAlbertovich@gmail.com", name="Artem"),
+        license=openapi.License(name="BSD License")
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny]
+)
 
 router = routers.SimpleRouter()
 router.register(r"users", UserViewSet, basename="users")
@@ -29,4 +43,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),  # Для подключения модуля авторизации (кнопка login)
     path("api/", include(router.urls)),
     path("admin/", task_manager_admin_site.urls),
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
 ]
