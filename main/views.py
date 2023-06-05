@@ -11,7 +11,7 @@ class UserFilter(django_filters.FilterSet):
 
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ("username",)
 
 
 class TaskFilter(django_filters.FilterSet):
@@ -22,7 +22,7 @@ class TaskFilter(django_filters.FilterSet):
 
     class Meta:
         model = Task
-        fields = ('status', 'tags')
+        fields = ("status", "tags")
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -33,7 +33,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all().select_related('performer', 'author').prefetch_related('tags')
+    queryset = (
+        Task.objects.all()
+        .select_related("performer", "author")
+        .prefetch_related("tags")
+    )
     serializer_class = TaskSerializer
     filterset_class = TaskFilter
     permission_classes = (IsAdminDelete,)

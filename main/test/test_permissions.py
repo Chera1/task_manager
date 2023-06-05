@@ -8,7 +8,7 @@ from main.models import Tag, Task, User
 
 
 class AccountTests(APITestCase):
-    url_tasks = reverse('tasks-list')
+    url_tasks = reverse("tasks-list")
     client = APIClient()
 
     def test_not_possible_delete_task_by_authorized_user(self):
@@ -39,9 +39,14 @@ class AccountTests(APITestCase):
         :return: content of response
         """
         tag_content = self.create_tag(client)
-        data = {"title": "test_task", "expired_date": datetime.datetime.now(), "author": user.id, "performer": user.id,
-                "tags": [tag_content["id"]]}
-        response = client.post(self.url_tasks, data, format='json')
+        data = {
+            "title": "test_task",
+            "expired_date": datetime.datetime.now(),
+            "author": user.id,
+            "performer": user.id,
+            "tags": [tag_content["id"]],
+        }
+        response = client.post(self.url_tasks, data, format="json")
         content = response.json()
         assert response.status_code == HTTPStatus.CREATED, content
         assert Task.objects.count() == 1
@@ -53,9 +58,9 @@ class AccountTests(APITestCase):
         :param client: client instance
         :return: content of response
         """
-        url = reverse('tags-list')
+        url = reverse("tags-list")
         data = {"title": "test_tag"}
-        response = client.post(url, data, format='json')
+        response = client.post(url, data, format="json")
         content = response.json()
         assert response.status_code == HTTPStatus.CREATED, content
         assert Tag.objects.count() == 1
