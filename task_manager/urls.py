@@ -42,9 +42,7 @@ router.register(r"tasks", TaskViewSet, basename="tasks")
 router.register(r"tags", TagViewSet, basename="tags")
 
 urlpatterns = [
-    path(
-        "api-auth/", include("rest_framework.urls")
-    ),  # Для подключения модуля авторизации (кнопка login)
+    path("api-auth/", include("rest_framework.urls")),
     path("api/", include(router.urls)),
     path("admin/", task_manager_admin_site.urls),
     re_path(
