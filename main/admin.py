@@ -4,12 +4,8 @@ from .models import User, Task, Tag
 
 
 class CustomUserAdmin(UserAdmin):
-    fieldsets = UserAdmin.fieldsets + (
-        (None, {"fields": ["role"]}),
-    )
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        (None, {"fields": ["role"]}),
-    )
+    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ["role"]}),)
+    add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ["role"]}),)
 
 
 class TaskManagerAdminSite(admin.AdminSite):
