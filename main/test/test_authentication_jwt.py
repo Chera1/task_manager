@@ -18,7 +18,9 @@ class TestJWTAuth(APITestCase):
     def create_user() -> User:
         return UserFactory.create()
 
-    def token_request(self, username: str = None, password: str = "password") -> Response:
+    def token_request(
+        self, username: str = None, password: str = "password"
+    ) -> Response:
         client = self.client_class()
         if not username:
             username = self.create_user().username
