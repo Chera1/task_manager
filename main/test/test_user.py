@@ -11,12 +11,12 @@ class TestUserViewSet(TestViewSetBase):
     }
 
     @staticmethod
-    def excepted_details(entity: dict, attributes: dict):
+    def expected_details(entity: dict, attributes: dict):
         return {**attributes, "id": entity["id"]}
 
     def test_create(self):
         user = self.create(self.user_attributes)
-        excepted_response = self.excepted_details(user, self.user_attributes)
+        excepted_response = self.expected_details(user, self.user_attributes)
         assert user == excepted_response
 
     def test_delete(self):
@@ -26,7 +26,7 @@ class TestUserViewSet(TestViewSetBase):
     def test_get(self):
         user = self.create(self.user_attributes)
         user_info = self.retrieve(user["id"])
-        excepted_response = self.excepted_details(user_info, self.user_attributes)
+        excepted_response = self.expected_details(user_info, self.user_attributes)
         assert user_info == excepted_response
 
     def test_update_last_name(self):
@@ -46,3 +46,13 @@ class TestUserViewSet(TestViewSetBase):
         assert len(users) == len(
             [user for user in users if "smith" in user["username"]]
         )
+
+    def test_not_possible_update_last_name_by_not_staff_user(self):
+        user = self.create(self.user_attributes)
+        self.not_possible_update_by_not_staff_user(
+            {"last_name": "Holms", "username": user["username"]}, user["id"]
+        )
+
+    def test_not_possible_delete_user_by_not_staff_user(self):
+        user = self.create(self.user_attributes)
+        self.not_possible_delete_by_not_staff_user(user["id"])
