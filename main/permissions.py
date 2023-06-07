@@ -6,7 +6,5 @@ class IsAdminDelete(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        elif request.method in ("DELETE", "PUT") and bool(
-            request.user and request.user.is_staff
-        ):
+        elif request.method in ("DELETE", "PUT") and request.user.is_staff:
             return True

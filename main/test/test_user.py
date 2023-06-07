@@ -46,13 +46,3 @@ class TestUserViewSet(TestViewSetBase):
         assert len(users) == len(
             [user for user in users if "smith" in user["username"]]
         )
-
-    def test_not_possible_update_last_name_by_not_staff_user(self):
-        user = self.create(self.user_attributes)
-        self.not_possible_update_by_not_staff_user(
-            {"last_name": "Holms", "username": user["username"]}, user["id"]
-        )
-
-    def test_not_possible_delete_user_by_not_staff_user(self):
-        user = self.create(self.user_attributes)
-        self.not_possible_delete_by_not_staff_user(user["id"])

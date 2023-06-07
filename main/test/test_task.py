@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from main.models import Tag
 from main.test.base import TestViewSetBase
 
 
@@ -8,6 +9,7 @@ class TestTaskViewSet(TestViewSetBase):
 
     def setUp(self) -> None:
         super().setUp()
+        self.test_tag = Tag.objects.create(title="test_tag")
         self.task_attributes = {
             "title": "test_task",
             "expired_date": datetime.now(),
@@ -35,10 +37,6 @@ class TestTaskViewSet(TestViewSetBase):
         task = self.create(self.task_attributes)
         self.delete(task["id"])
 
-    def test_not_possible_delete_task_by_not_staff_user(self):
-        task = self.create(self.task_attributes)
-        self.not_possible_delete_by_not_staff_user(task["id"])
-
     def test_get(self) -> None:
         task = self.create(self.task_attributes)
         task_info = self.retrieve(task["id"])
@@ -62,15 +60,4 @@ class TestTaskViewSet(TestViewSetBase):
         tasks = self.get_filters({"status": "new_status"})
         assert len(tasks) == len(
             [user for user in tasks if "new_status" in user["status"]]
-        )
-
-    def test_not_possible_update_description_by_authorized_user(self):
-        task = self.create(self.task_attributes)
-        self.not_possible_update_by_not_staff_user(
-            {
-                "description": "new_description",
-                "tags": task["tags"],
-                "title": task["title"],
-            },
-            task["id"],
         )

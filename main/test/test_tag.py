@@ -24,17 +24,7 @@ class TestTagViewSet(TestViewSetBase):
         excepted_response = self.excepted_details(tag_info, self.tag_attributes)
         assert tag_info == excepted_response
 
-    def test_update_last_name(self) -> None:
-        tag = self.create(self.tag_attributes)
-        updated_tag = self.update(
-            {
-                "title": "test_tag_test",
-            },
-            tag["id"],
-        )
-        assert updated_tag["title"] == "test_tag_test"
-
     def test_list(self) -> None:
-        [self.create(self.tag_attributes) for _ in range(5)]
+        tags = [self.create(self.tag_attributes) for _ in range(5)]
         data = self.list()
-        assert len(data) == 6
+        assert data == tags

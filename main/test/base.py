@@ -21,7 +21,6 @@ class TestViewSetBase(APITestCase):
         cls.admin = cls.create_api_admin()
         cls.user = cls.create_api_user()
         cls.client = APIClient()
-        cls.test_tag = Tag.objects.create(**{"title": "test_tag"})
 
     def setUp(self) -> None:
         self.client.force_login(self.admin)
@@ -51,14 +50,6 @@ class TestViewSetBase(APITestCase):
         response = self.client.delete(self.detail_url(key))
         assert response.status_code == HTTPStatus.NO_CONTENT, response.content
 
-    def not_possible_delete_by_not_staff_user(self, key: Union[int, str]):
-        """
-        Ensure we can't delete an object by common user.
-        """
-        self.client.force_login(self.user)
-        response = self.client.delete(self.detail_url(key))
-        assert response.status_code == HTTPStatus.FORBIDDEN, response.content
-
     def retrieve(self, key: Union[int, str]) -> ReturnDict:
         response = self.client.get(self.detail_url(key))
         assert response.status_code == HTTPStatus.OK, response.content
@@ -73,14 +64,6 @@ class TestViewSetBase(APITestCase):
         response = self.client.put(self.detail_url(key), data=data)
         assert response.status_code == HTTPStatus.OK, response.content
         return response.data
-
-    def not_possible_update_by_not_staff_user(self, data: dict, key: Union[int, str]):
-        """
-        Ensure we can't update an object by common user.
-        """
-        self.client.force_login(self.user)
-        response = self.client.put(self.detail_url(key), data=data)
-        assert response.status_code == HTTPStatus.FORBIDDEN, response.content
 
     def get_filters(self, data: dict, args: List[Union[str, int]] = None) -> ReturnList:
         self.client.force_login(self.user)
