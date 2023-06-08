@@ -1,3 +1,3 @@
 test:
-	coverage run -m pytest tests/
+	coverage run -m pytest main/test/
 	coveralls
