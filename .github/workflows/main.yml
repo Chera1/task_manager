@@ -23,4 +23,4 @@ jobs:
         with:
             parallel: true
             flag-name: Run tests
-            github-token: ${{ secrets.github_token }}
+            github-token: ${{ vars.COVERALLS_REPO_TOKEN }}
