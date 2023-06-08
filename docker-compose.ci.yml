@@ -17,7 +17,7 @@ services:
     image: userapp_api
     build:
       context: .
-      target: db
+      target: base
     environment:
       <<: *app-config
       <<: *db-config
