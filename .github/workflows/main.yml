@@ -16,5 +16,20 @@ jobs:
       - name: Run tests
         env:
           COVERAGE: true
-          RAILS_ENV: test
-        run: docker-compose --file docker-compose.ci.yml run --rm api pytest
+          DJANGO_ENV: dev
+        run: docker-compose --file docker-compose.ci.yml run --rm api coverage run -m pytest
+
+      - name: Coveralls
+        uses: AndreMiras/coveralls-python-action@develop
+        with:
+          parallel: true
+          flag-name: Run tests
+
+  coveralls_finish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: AndreMiras/coveralls-python-action@develop
+      with:
+        parallel-finished: true
