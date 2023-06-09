@@ -6,7 +6,7 @@ from rest_framework.test import APIClient, APITestCase
 from main.models import Tag, Task, User
 
 
-class AccountTests(APITestCase):
+class PermissionTestViewSet(APITestCase):
     url_tasks = reverse("tasks-list")
     url_users = reverse("users-list")
     url_tags = reverse("tags-list")
