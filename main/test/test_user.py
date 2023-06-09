@@ -11,36 +11,36 @@ class TestUserViewSet(TestViewSetBase):
     }
 
     @staticmethod
-    def excepted_details(entity: dict, attributes: dict):
+    def excepted_details(entity: dict, attributes: dict) -> dict:
         return {**attributes, "id": entity["id"]}
 
-    def test_create(self):
+    def test_create(self) -> None:
         user = self.create(self.user_attributes)
         excepted_response = self.excepted_details(user, self.user_attributes)
         assert user == excepted_response
 
-    def test_delete(self):
+    def test_delete(self) -> None:
         user = self.create(self.user_attributes)
         self.delete(user["id"])
 
-    def test_get(self):
+    def test_get(self) -> None:
         user = self.create(self.user_attributes)
         user_info = self.retrieve(user["id"])
         excepted_response = self.excepted_details(user_info, self.user_attributes)
         assert user_info == excepted_response
 
-    def test_update_last_name(self):
+    def test_update_last_name(self) -> None:
         user = self.create(self.user_attributes)
         updated_user = self.update(
             {"last_name": "Holms", "username": user["username"]}, user["id"]
         )
         assert updated_user["last_name"] == "Holms"
 
-    def test_list(self):
+    def test_list(self) -> None:
         data = self.list()
         assert len(data) == 2
 
-    def test_filters(self):
+    def test_filters(self) -> None:
         self.create(self.user_attributes)
         users = self.get_filters({"username": "smith"})
         assert len(users) == len(

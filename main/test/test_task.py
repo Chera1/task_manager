@@ -1,28 +1,26 @@
 from datetime import datetime
 
+from main.models import Tag
 from main.test.base import TestViewSetBase
 
 
 class TestTaskViewSet(TestViewSetBase):
     basename = "tasks"
-    task_attributes = {
-        "title": "test_task",
-        "expired_date": datetime.now(),
-    }
 
-    @classmethod
-    def get_relationship_attributes(cls):
-        cls.task_attributes.update(
-            **{
-                "author": cls.user.id,
-                "performer": cls.user.id,
-                "tags": [cls.test_tag.id],
-                "description": "description",
-            }
-        )
+    def setUp(self) -> None:
+        super().setUp()
+        self.test_tag = Tag.objects.create(title="test_tag")
+        self.task_attributes = {
+            "title": "test_task",
+            "expired_date": datetime.now(),
+            "author": self.user.id,
+            "performer": self.user.id,
+            "tags": [self.test_tag.id],
+            "description": "description",
+        }
 
     @staticmethod
-    def excepted_details(entity: dict, attributes: dict):
+    def excepted_details(entity: dict, attributes: dict) -> dict:
         return {
             **attributes,
             "id": entity["id"],
@@ -30,26 +28,22 @@ class TestTaskViewSet(TestViewSetBase):
             "expired_date": entity["expired_date"],
         }
 
-    def test_create(self):
-        self.get_relationship_attributes()
+    def test_create(self) -> None:
         task = self.create(self.task_attributes)
         excepted_response = self.excepted_details(task, self.task_attributes)
         assert task == excepted_response
 
-    def test_delete(self):
-        self.get_relationship_attributes()
+    def test_delete(self) -> None:
         task = self.create(self.task_attributes)
         self.delete(task["id"])
 
-    def test_get(self):
-        self.get_relationship_attributes()
+    def test_get(self) -> None:
         task = self.create(self.task_attributes)
         task_info = self.retrieve(task["id"])
         excepted_response = self.excepted_details(task_info, self.task_attributes)
         assert task_info == excepted_response
 
-    def test_update_description(self):
-        self.get_relationship_attributes()
+    def test_update_description(self) -> None:
         task = self.create(self.task_attributes)
         updated_task = self.update(
             {
@@ -61,8 +55,7 @@ class TestTaskViewSet(TestViewSetBase):
         )
         assert updated_task["description"] == "new_description"
 
-    def test_filters(self):
-        self.get_relationship_attributes()
+    def test_filters(self) -> None:
         self.create(self.task_attributes)
         tasks = self.get_filters({"status": "new_status"})
         assert len(tasks) == len(
