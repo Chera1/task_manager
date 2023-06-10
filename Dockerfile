@@ -22,10 +22,15 @@ RUN apt-get update -qq \
         unzip \
         vim \
         wget \
+        sudo \
     && apt-get clean \
     && rm -rf /var/cache/apt/archives/* \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && truncate -s 0 /var/log/*log
+
+RUN curl -Ls https://download.newrelic.com/install/newrelic-cli/scripts/install.sh | bash &&  \
+    sudo NEW_RELIC_API_KEY=NRAK-5RTSFHA4LFVX95ZIAFGLE573S4Y NEW_RELIC_ACCOUNT_ID=3970623 NEW_RELIC_REGION=EU  \
+    /usr/local/bin/newrelic install -n logs-integration
 
 RUN pip install "poetry==$POETRY_VERSION"
 
