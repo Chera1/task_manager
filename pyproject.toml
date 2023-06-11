@@ -15,6 +15,7 @@ drf-yasg = "^1.21.5"
 djangorestframework-simplejwt = "^5.2.2"
 coveralls = "^3.3.1"
 newrelic = "^8.8.0"
+pillow = "^9.5.0"
 
 [tool.poetry.dev-dependencies]
 

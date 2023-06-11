@@ -13,8 +13,8 @@ class TestTaskViewSet(TestViewSetBase):
         self.task_attributes = {
             "title": "test_task",
             "expired_date": datetime.now(),
-            "author": self.user.id,
-            "performer": self.user.id,
+            "author": self.admin.id,
+            "performer": self.admin.id,
             "tags": [self.test_tag.id],
             "description": "description",
         }
