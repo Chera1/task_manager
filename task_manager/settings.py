@@ -161,7 +161,11 @@ else:
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
     MEDIA_URL = "/media/"
-    
+
+UPLOAD_MAX_SIZES: dict[str, int] = {
+    "avatar_picture": 1 * 1024 * 1024,
+}
+
 ROLLBAR = {
     "access_token": "f8e3c86f15aa47cd8814978d47f25ff5",
     "environment": "development" if DEBUG else "production",
