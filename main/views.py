@@ -7,10 +7,11 @@ import django_filters
 
 class UserFilter(django_filters.FilterSet):
     username = django_filters.CharFilter(lookup_expr="icontains")
+    last_name = django_filters.CharFilter(lookup_expr="icontains")
 
     class Meta:
         model = User
-        fields = ("username",)
+        fields = ("username", "last_name")
 
 
 class TaskFilter(django_filters.FilterSet):

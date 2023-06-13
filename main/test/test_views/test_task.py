@@ -20,7 +20,7 @@ class TestTaskViewSet(TestViewSetBase):
         }
 
     @staticmethod
-    def excepted_details(entity: dict, attributes: dict) -> dict:
+    def expected_details(entity: dict, attributes: dict) -> dict:
         return {
             **attributes,
             "id": entity["id"],
@@ -30,7 +30,7 @@ class TestTaskViewSet(TestViewSetBase):
 
     def test_create(self) -> None:
         task = self.create(self.task_attributes)
-        excepted_response = self.excepted_details(task, self.task_attributes)
+        excepted_response = self.expected_details(task, self.task_attributes)
         assert task == excepted_response
 
     def test_delete(self) -> None:
@@ -40,7 +40,7 @@ class TestTaskViewSet(TestViewSetBase):
     def test_get(self) -> None:
         task = self.create(self.task_attributes)
         task_info = self.retrieve(task["id"])
-        excepted_response = self.excepted_details(task_info, self.task_attributes)
+        excepted_response = self.expected_details(task_info, self.task_attributes)
         assert task_info == excepted_response
 
     def test_update_description(self) -> None:
@@ -57,7 +57,7 @@ class TestTaskViewSet(TestViewSetBase):
 
     def test_filters(self) -> None:
         self.create(self.task_attributes)
-        tasks = self.get_filters({"status": "new_status"})
+        tasks = self.list({"status": "new_status"})
         assert len(tasks) == len(
             [user for user in tasks if "new_status" in user["status"]]
         )
