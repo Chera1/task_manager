@@ -54,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "rollbar.contrib.django.middleware.RollbarNotifierMiddleware",
 ]
 
 ROOT_URLCONF = "task_manager.urls"
@@ -160,3 +161,10 @@ else:
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
     MEDIA_URL = "/media/"
+    
+ROLLBAR = {
+    "access_token": "f8e3c86f15aa47cd8814978d47f25ff5",
+    "environment": "development" if DEBUG else "production",
+    "code_version": "1.0",
+    "root": BASE_DIR,
+}
