@@ -13,7 +13,8 @@ class UserFactory(Factory):
     last_name = Faker("last_name")
     username = Faker("user_name")
     date_of_birth = Faker("date")
-    phone = Faker("phone_number")
+    phone = Faker("msisdn")
+    avatar_picture = Faker("image_file", fmt="jpeg")
 
     class Meta:
         model = dict

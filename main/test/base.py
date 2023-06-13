@@ -63,12 +63,14 @@ class TestViewSetBase(APITestCase):
         assert response.status_code == HTTPStatus.OK, response.content
         return response.json()
 
-    def request_list(self, args: List[Union[str, int]] = None) -> Response:
+    def request_list(
+        self, data: dict = None, args: List[Union[str, int]] = None
+    ) -> Response:
         url = self.list_url(args)
-        return self.api_client.get(url)
+        return self.api_client.get(url, data=data)
 
-    def list(self, args: List[Union[str, int]] = None) -> ReturnList:
-        response = self.request_list(args)
+    def list(self, data: dict = None, args: List[Union[str, int]] = None) -> ReturnList:
+        response = self.request_list(data, args)
         assert response.status_code == HTTPStatus.OK, response.content
         return response.json()
 
@@ -80,8 +82,3 @@ class TestViewSetBase(APITestCase):
         response = self.request_update(data, key)
         assert response.status_code == HTTPStatus.OK, response.content
         return response.json()
-
-    def get_filters(self, data: dict, args: List[Union[str, int]] = None) -> ReturnList:
-        response = self.client.get(self.list_url(args), data=data)
-        assert response.status_code == HTTPStatus.OK, response.content
-        return response.data
