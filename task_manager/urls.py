@@ -18,8 +18,6 @@ from django.urls import path, include, re_path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from main.admin import task_manager_admin_site
-from main.views import UserViewSet, TaskViewSet, TagViewSet, index
-from rest_framework import routers, permissions
 from main.services.single_resource import BulkRouter
 from main.views import (
     UserViewSet,
