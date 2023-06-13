@@ -52,6 +52,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "rollbar.contrib.django.middleware.RollbarNotifierMiddleware",
 ]
 
 ROOT_URLCONF = "task_manager.urls"
@@ -158,6 +159,13 @@ else:
 
 UPLOAD_MAX_SIZES: dict[str, int] = {
     "avatar_picture": 1 * 1024 * 1024,
+}
+
+ROLLBAR = {
+    "access_token": "f8e3c86f15aa47cd8814978d47f25ff5",
+    "environment": "development" if DEBUG else "production",
+    "code_version": "1.0",
+    "root": BASE_DIR,
 }
 
 
