@@ -20,7 +20,8 @@ services:
       DATABASE_HOST: db
       DATABASE_PORT: 5432
       COVERALLS_REPO_TOKEN: ${COVERALLS_REPO_TOKEN}
-    command: poetry run python manage.py runserver 0.0.0.0:8000
+    command: poetry run newrelic-admin run-python manage.py runserver 0.0.0.0:8000
+      
 
   db:
     image: postgres:12
