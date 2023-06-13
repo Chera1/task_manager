@@ -1,4 +1,4 @@
-from main.test.base import TestViewSetBase
+from main.tests.base import TestViewSetBase
 
 
 class TestTagViewSet(TestViewSetBase):
@@ -20,7 +20,7 @@ class TestTagViewSet(TestViewSetBase):
 
     def test_get(self) -> None:
         tag = self.create(self.tag_attributes)
-        tag_info = self.retrieve(tag["id"])
+        tag_info = self.retrieve(tag, tag["id"])
         excepted_response = self.expected_details(tag_info, self.tag_attributes)
         assert tag_info == excepted_response
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from main.models import Tag
-from main.test.base import TestViewSetBase
+from main.tests.base import TestViewSetBase
 
 
 class TestTaskViewSet(TestViewSetBase):
@@ -39,7 +39,7 @@ class TestTaskViewSet(TestViewSetBase):
 
     def test_get(self) -> None:
         task = self.create(self.task_attributes)
-        task_info = self.retrieve(task["id"])
+        task_info = self.retrieve(task, task["id"])
         excepted_response = self.expected_details(task_info, self.task_attributes)
         assert task_info == excepted_response
 

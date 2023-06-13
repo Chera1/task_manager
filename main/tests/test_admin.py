@@ -15,7 +15,7 @@ class TestAdmin(APITestCase):
     def setUpTestData(cls) -> None:
         super().setUpTestData()
         cls.admin = User.objects.create_superuser(
-            "test@test.ru", email=None, password=None
+            "tests@tests.ru", email=None, password=None
         )
         cls.client = APIClient()
         cls.client.force_login(cls.admin)
