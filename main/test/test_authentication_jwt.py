@@ -6,7 +6,8 @@ from requests import Response
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from main.models.user import UserFactory, User
+from main.models.user import User
+from .fixtures.factories.user import UserFactory
 
 
 class TestJWTAuth(APITestCase):
@@ -15,15 +16,20 @@ class TestJWTAuth(APITestCase):
     any_api_url = "users"
 
     @staticmethod
-    def create_user() -> User:
-        return UserFactory.create()
+    def create_user() -> dict:
+        user_data = UserFactory.build()
+        user_data["phone"] = user_data["phone"][:20]
+        User.objects.create_user(**user_data)
+        return user_data
 
     def token_request(
         self, username: str = None, password: str = "password"
     ) -> Response:
         client = self.client_class()
         if not username:
-            username = self.create_user().username
+            user = self.create_user()
+            username = user["username"]
+            password = user["password"]
         return client.post(
             self.token_url, data={"username": username, "password": password}
         )

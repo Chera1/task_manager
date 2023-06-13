@@ -1,72 +1,87 @@
 from http import HTTPStatus
 from typing import Union, List
 
+from requests import Response
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient, APITestCase
 from rest_framework.utils.serializer_helpers import ReturnList, ReturnDict
 
-from main.models import User, Tag
+from main.models import User
 
 
 class TestViewSetBase(APITestCase):
     admin: User = None
-    user: User = None
-    client: APIClient = None
+    api_client: APIClient = None
     basename: str
-    test_tag: Tag
 
     @classmethod
     def setUpTestData(cls) -> None:
         super().setUpTestData()
         cls.admin = cls.create_api_admin()
-        cls.user = cls.create_api_user()
-        cls.client = APIClient()
-
-    def setUp(self) -> None:
-        self.client.force_login(self.admin)
+        cls.api_client = APIClient()
+        cls.api_client.force_login(cls.admin)
 
     @classmethod
     def create_api_admin(cls):
         return User.objects.create_superuser("test@test.ru", email=None, password=None)
 
     @classmethod
-    def create_api_user(cls):
-        return User.objects.create_user("justuser@test.ru", email=None, password=None)
-
-    @classmethod
     def detail_url(cls, key: Union[int, str]) -> str:
         return reverse(f"{cls.basename}-detail", args=[key])
 
     @classmethod
-    def list_url(cls, args: List[Union[int, str]]) -> str:
+    def list_url(cls, args: List[Union[int, str]] = None) -> str:
         return reverse(f"{cls.basename}-list", args=args)
 
+    def request_create(
+        self, data: dict, args: List[Union[str, int]] = None
+    ) -> Response:
+        url = self.list_url(args)
+        return self.api_client.post(url, data=data)
+
     def create(self, data: dict, args: List[Union[str, int]] = None) -> ReturnDict:
-        response = self.client.post(self.list_url(args), data=data)
+        response = self.request_create(data, args)
         assert response.status_code == HTTPStatus.CREATED, response.content
-        return response.data
+        return response.json()
+
+    def request_delete(self, key: Union[int, str] = None) -> Response:
+        url = self.detail_url(key)
+        return self.api_client.delete(url)
 
     def delete(self, key: Union[int, str]) -> None:
-        response = self.client.delete(self.detail_url(key))
+        response = self.request_delete(key)
         assert response.status_code == HTTPStatus.NO_CONTENT, response.content
 
+    def request_retrieve(
+        self, data: dict = None, key: Union[int, str] = None
+    ) -> Response:
+        url = self.detail_url(key)
+        return self.api_client.get(url, data=data)
+
     def retrieve(self, key: Union[int, str]) -> ReturnDict:
-        response = self.client.get(self.detail_url(key))
+        response = self.request_retrieve(key=key)
         assert response.status_code == HTTPStatus.OK, response.content
-        return response.data
+        return response.json()
+
+    def request_list(self, args: List[Union[str, int]] = None) -> Response:
+        url = self.list_url(args)
+        return self.api_client.get(url)
 
     def list(self, args: List[Union[str, int]] = None) -> ReturnList:
-        response = self.client.get(self.list_url(args))
+        response = self.request_list(args)
         assert response.status_code == HTTPStatus.OK, response.content
-        return response.data
+        return response.json()
+
+    def request_update(self, data: dict, key: Union[int, str] = None) -> Response:
+        url = self.detail_url(key)
+        return self.api_client.put(url, data=data)
 
     def update(self, data: dict, key: Union[int, str]) -> ReturnDict:
-        response = self.client.put(self.detail_url(key), data=data)
+        response = self.request_update(data, key)
         assert response.status_code == HTTPStatus.OK, response.content
-        return response.data
+        return response.json()
 
     def get_filters(self, data: dict, args: List[Union[str, int]] = None) -> ReturnList:
-        self.client.force_login(self.user)
         response = self.client.get(self.list_url(args), data=data)
         assert response.status_code == HTTPStatus.OK, response.content
         return response.data

@@ -97,7 +97,7 @@ class PermissionTestViewSet(APITestCase):
 
     def test_delete_user_by_staff_user(self):
         """
-        Ensure we can delete a new task object.
+        Ensure we can delete a new user object.
         """
         user = User.objects.create_superuser("test@test.ru", email=None, password=None)
         self.client.force_login(user)
