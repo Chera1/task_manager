@@ -16,7 +16,7 @@ class PermissionTestViewSet(APITestCase):
         """
         Ensure we can't delete a new task object.
         """
-        user = User.objects.create_user("test@test.ru", email=None, password=None)
+        user = User.objects.create_user("tests@tests.ru", email=None, password=None)
         self.client.force_login(user)
         content = self.create_task(self.client, user)
         response = self.client.delete(self.url_tasks + str(content["id"]) + "/")
@@ -26,7 +26,7 @@ class PermissionTestViewSet(APITestCase):
         """
         Ensure we can't delete a new user object.
         """
-        user = User.objects.create_user("test@test.ru", email=None, password=None)
+        user = User.objects.create_user("tests@tests.ru", email=None, password=None)
         self.client.force_login(user)
         response = self.client.delete(self.url_users + str(user.id) + "/")
         assert response.status_code == HTTPStatus.FORBIDDEN
@@ -35,7 +35,7 @@ class PermissionTestViewSet(APITestCase):
         """
         Ensure we can't delete a new tag object.
         """
-        user = User.objects.create_user("test@test.ru", email=None, password=None)
+        user = User.objects.create_user("tests@tests.ru", email=None, password=None)
         tag = self.create_tag(self.client)
         self.client.force_login(user)
         response = self.client.delete(self.url_tags + str(tag["id"]) + "/")
@@ -45,7 +45,7 @@ class PermissionTestViewSet(APITestCase):
         """
         Ensure we can't delete a new task object.
         """
-        user = User.objects.create_user("test@test.ru", email=None, password=None)
+        user = User.objects.create_user("tests@tests.ru", email=None, password=None)
         self.client.force_login(user)
         content = self.create_task(self.client, user)
         response = self.client.put(
@@ -62,7 +62,7 @@ class PermissionTestViewSet(APITestCase):
         """
         Ensure we can't update a new user object.
         """
-        user = User.objects.create_user("test@test.ru", email=None, password=None)
+        user = User.objects.create_user("tests@tests.ru", email=None, password=None)
         self.client.force_login(user)
         response = self.client.put(
             self.url_users + str(user.id) + "/",
@@ -74,7 +74,7 @@ class PermissionTestViewSet(APITestCase):
         """
         Ensure we can't delete a new tag object.
         """
-        user = User.objects.create_user("test@test.ru", email=None, password=None)
+        user = User.objects.create_user("tests@tests.ru", email=None, password=None)
         tag = self.create_tag(self.client)
         self.client.force_login(user)
         response = self.client.put(
@@ -89,7 +89,9 @@ class PermissionTestViewSet(APITestCase):
         """
         Ensure we can delete a new task object.
         """
-        user = User.objects.create_superuser("test@test.ru", email=None, password=None)
+        user = User.objects.create_superuser(
+            "tests@tests.ru", email=None, password=None
+        )
         self.client.force_login(user)
         content = self.create_task(self.client, user)
         response = self.client.delete(self.url_tasks + str(content["id"]) + "/")
@@ -99,7 +101,9 @@ class PermissionTestViewSet(APITestCase):
         """
         Ensure we can delete a new user object.
         """
-        user = User.objects.create_superuser("test@test.ru", email=None, password=None)
+        user = User.objects.create_superuser(
+            "tests@tests.ru", email=None, password=None
+        )
         self.client.force_login(user)
         response = self.client.delete(self.url_users + str(user.id) + "/")
         assert response.status_code == HTTPStatus.NO_CONTENT
