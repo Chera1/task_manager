@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 
 from main.models import Tag
 from main.tests.base import TestViewSetBase
@@ -36,6 +37,8 @@ class TestTaskViewSet(TestViewSetBase):
     def test_delete(self) -> None:
         task = self.create(self.task_attributes)
         self.delete(task["id"])
+        undefined_task_response = self.request_retrieve(task, task["id"])
+        assert undefined_task_response.status_code == HTTPStatus.NOT_FOUND
 
     def test_get(self) -> None:
         task = self.create(self.task_attributes)

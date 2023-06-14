@@ -29,6 +29,8 @@ class TestUserViewSet(TestViewSetBase):
         user_attributes = UserFactory.build()
         user = self.create(user_attributes)
         self.delete(user["id"])
+        undefined_user_response = self.request_retrieve(user, user["id"])
+        assert undefined_user_response.status_code == HTTPStatus.NOT_FOUND
 
     def test_get(self) -> None:
         user_attributes = UserFactory.build()

@@ -84,11 +84,13 @@ class TestViewSetBase(APITestCase):
         assert response.status_code == HTTPStatus.CREATED, response.content
         return response.json()
 
-    def request_delete(self, key: Union[int, str] = None) -> Response:
+    def request_delete(
+        self, key: Union[Union[int, str], List[Union[int, str]]] = None
+    ) -> Response:
         url = self.detail_url(key)
         return self.api_client.delete(url)
 
-    def delete(self, key: Union[int, str]) -> None:
+    def delete(self, key: Union[Union[int, str], List[Union[int, str]]]) -> None:
         response = self.request_delete(key)
         assert response.status_code == HTTPStatus.NO_CONTENT, response.content
 
@@ -118,11 +120,15 @@ class TestViewSetBase(APITestCase):
         assert response.status_code == HTTPStatus.OK, response.content
         return response.json()
 
-    def request_update(self, data: dict, key: Union[int, str] = None) -> Response:
+    def request_update(
+        self, data: dict, key: Union[Union[int, str], List[Union[int, str]]] = None
+    ) -> Response:
         url = self.detail_url(key)
         return self.api_client.put(url, data=data)
 
-    def update(self, data: dict, key: Union[int, str]) -> ReturnDict:
+    def update(
+        self, data: dict, key: Union[Union[int, str], List[Union[int, str]]]
+    ) -> ReturnDict:
         response = self.request_update(data, key)
         assert response.status_code == HTTPStatus.OK, response.content
         return response.json()

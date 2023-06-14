@@ -49,3 +49,34 @@ class TestUserTasksViewSet(TestViewSetBase):
         retrieved_task = self.retrieve(created_task, key=[user.id, created_task["id"]])
 
         assert retrieved_task == created_task
+
+    def test_delete(self) -> None:
+        created_task = self.create_task(self.task_attributes)
+        created_task = self.get_expected_task_attr(created_task)
+
+        self.delete(key=[self.admin.id, created_task["id"]])
+        retrieved_task_response = self.request_retrieve(
+            created_task, key=[self.admin.id, created_task["id"]]
+        )
+
+        assert retrieved_task_response.status_code == HTTPStatus.NOT_FOUND
+
+    def test_update(self) -> None:
+        created_task = self.create_task(self.task_attributes)
+        created_task = self.get_expected_task_attr(created_task)
+        created_tag = self.create_tag({"title": "test_tag"})
+
+        self.update(
+            {
+                "description": "new_description",
+                "tags": [created_tag.id],
+                "title": created_task["title"],
+            },
+            key=[self.admin.id, created_task["id"]],
+        )
+
+        retrieved_task = self.retrieve(
+            created_task, key=[self.admin.id, created_task["id"]]
+        )
+
+        assert retrieved_task["description"] == "new_description"

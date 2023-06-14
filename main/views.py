@@ -58,7 +58,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminDelete,)
 
 
-class UserTasksViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
+class UserTasksViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = (
         Task.objects.order_by("id")
         .select_related("author", "performer")
@@ -67,7 +67,7 @@ class UserTasksViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = TaskSerializer
 
 
-class TaskTagsViewSet(viewsets.ReadOnlyModelViewSet):
+class TaskTagsViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
 
     def get_queryset(self):
