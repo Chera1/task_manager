@@ -11,6 +11,8 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis
+      - celery
     environment: &api-environment
       DJANGO_ENV: dev
       DJANGO_SECRET_KEY: secret_key
@@ -26,6 +28,8 @@ services:
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
       EMAIL_PORT: 465
       COVERALLS_REPO_TOKEN: ${COVERALLS_REPO_TOKEN}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     command: poetry run newrelic-admin run-python manage.py runserver 0.0.0.0:8000
 
   db:
@@ -35,3 +39,19 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command:
+      - celery --app=task_manager worker --loglevel=info
+    environment:
+      <<: *api-environment
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
