@@ -4,7 +4,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 
 from main.models import Task, Tag
-from main.services.mail import send_assign_notification
+from task_manager.tasks import send_assign_notification
 from .base import TestViewSetBase
 
 

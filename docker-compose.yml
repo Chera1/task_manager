@@ -47,11 +47,24 @@ services:
 
   celery:
     build: .
-    command:
-      - celery --app=task_manager worker --loglevel=info
+    command: celery --app=task_manager worker --loglevel=info
     environment:
       <<: *api-environment
     volumes:
       - .:/app
+    depends_on:
+      - redis
+    ports:
+      - "8004:8004"
+
+  flower:
+    build: .
+    command: celery --app=task_manager --broker=redis://redis:6379/0 flower --port=5555
+    environment:
+      <<: *api-environment
+    volumes:
+      - .:/app
+    ports:
+      - "5555:5555"
     depends_on:
       - redis
