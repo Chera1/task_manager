@@ -65,10 +65,12 @@ class UserTasksViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         .prefetch_related("tags")
     )
     serializer_class = TaskSerializer
+    permission_classes = (IsAdminDelete,)
 
 
 class TaskTagsViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
+    permission_classes = (IsAdminDelete,)
 
     def get_queryset(self):
         task_id = self.kwargs["parent_lookup_task_id"]

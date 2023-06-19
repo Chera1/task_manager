@@ -2,12 +2,14 @@ from datetime import datetime
 from unittest.mock import patch, MagicMock
 from django.core import mail
 from django.template.loader import render_to_string
+from django.test import override_settings
 
 from main.models import Task, Tag
-from main.services.mail import send_assign_notification
+from task_manager.tasks import send_assign_notification
 from .base import TestViewSetBase
 
 
+@override_settings(CELERY_TASK_ALWAYS_EAGER=True)
 class TestSendEmail(TestViewSetBase):
     basename = "tasks"
 
@@ -27,7 +29,7 @@ class TestSendEmail(TestViewSetBase):
     def test_send_performer_notification(self, fake_sender: MagicMock) -> None:
         performer = self.admin
         task = self.create(self.task_attributes)
-        send_assign_notification(task["id"])
+        send_assign_notification.delay(task["id"])
 
         fake_sender.assert_called_once_with(
             subject="You've assigned a task",
