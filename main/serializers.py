@@ -1,4 +1,8 @@
+from typing import Any
+
 from rest_framework.exceptions import ValidationError
+from celery.result import AsyncResult
+from task_manager.tasks import countdown
 
 from task_manager import settings
 from .models import User, Task, Tag
@@ -59,3 +63,34 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ("id", "title")
+
+
+class RepresentationSerializer(serializers.Serializer):
+    def update(self, instance: Any, validated_data: dict) -> Any:
+        pass
+
+    def create(self, validated_data: dict) -> Any:
+        pass
+
+
+class CountDownJobSerializer(RepresentationSerializer):
+    seconds = serializers.IntegerField(write_only=True)
+
+    task_id = serializers.CharField(read_only=True)
+    status = serializers.CharField(read_only=True)
+
+    def create(self, validated_data: dict) -> AsyncResult:
+        return countdown.delay(**validated_data)
+
+
+class ErrorSerializer(RepresentationSerializer):
+    non_field_errors: serializers.ListSerializer = serializers.ListSerializer(
+        child=serializers.CharField()
+    )
+
+
+class JobSerializer(RepresentationSerializer):
+    task_id = serializers.CharField(read_only=True)
+    status = serializers.CharField(read_only=True)
+    errors = ErrorSerializer(read_only=True, required=False)
+    result = serializers.CharField(required=False)

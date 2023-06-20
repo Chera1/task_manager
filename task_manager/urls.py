@@ -26,6 +26,8 @@ from main.views import (
     CurrentUserViewSet,
     UserTasksViewSet,
     TaskTagsViewSet,
+    CountDownJobViewSet,
+    AsyncJobViewSet,
 )
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -60,6 +62,8 @@ tasks.register(
 )
 router.register(r"tags", TagViewSet, basename="tags")
 router.register(r"current-user", CurrentUserViewSet, basename="current_user")
+router.register(r"countdown", CountDownJobViewSet, basename="countdown")
+router.register(r"jobs", AsyncJobViewSet, basename="jobs")
 
 urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),
