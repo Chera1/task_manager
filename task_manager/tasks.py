@@ -1,7 +1,11 @@
+import io
+import time
+
 from django.core import mail
 from django.template.loader import render_to_string
 
 from main.models import Task
+from main.services.storage_backends import local_file_name, save_file
 from task_manager.celery import app
 
 
@@ -29,3 +33,11 @@ def send_assign_notification(task_id: int) -> None:
         context={"task": task},
         recipients=[performer.email],
     )
+
+
+@app.task
+def countdown(seconds: int) -> str:
+    time.sleep(seconds)
+    result_data = io.BytesIO(b"test data")
+    file_name = local_file_name("test_report", countdown.request, "data")
+    return save_file(file_name, result_data)
